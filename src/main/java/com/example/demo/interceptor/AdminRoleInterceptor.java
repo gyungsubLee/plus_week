@@ -23,7 +23,7 @@ public class AdminRoleInterceptor implements HandlerInterceptor {
             throw new UnauthorizedException(HttpStatus.UNAUTHORIZED, "세션이 끊어졌습니다.");
         }
 
-        Authentication authentication = (Authentication) session.getAttribute(GlobalConstants.ADMIN_AUTH);
+        Authentication authentication = (Authentication) session.getAttribute(GlobalConstants.USER_AUTH);
 
         Role role = authentication.getRole();
 
