@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public class ReservationResponseDto {
     private LocalDateTime startAt;
     private LocalDateTime endAt;
 
+    @QueryProjection
     public ReservationResponseDto(Long id, String nickname, String itemName, LocalDateTime startAt, LocalDateTime endAt) {
         this.id = id;
         this.nickname = nickname;
