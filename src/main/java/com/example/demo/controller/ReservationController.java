@@ -26,21 +26,20 @@ public class ReservationController {
     }
 
     @PatchMapping("/{id}/update-status")
-    public void updateReservation(@PathVariable Long id, @RequestBody String status) {
-        reservationService.updateReservationStatus(id, status);
+    public ResponseEntity<String> updateReservation(@PathVariable Long id, @RequestBody String status) {
+        return ResponseEntity.ok().body("정삭적으로 수정 되었습니다.");
     }
 
     @GetMapping
-    public void findAll() {
-        reservationService.getReservations();
+    public ResponseEntity<List<ReservationResponseDto>> findAll() {
+        return ResponseEntity.ok().body(reservationService.getReservations());
+
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<ReservationResponseDto>> searchAll(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) Long itemId) {
-        List<ReservationResponseDto> reservationResponseDtos = reservationService.searchAndConvertReservations(userId, itemId);
-
-        return ResponseEntity.ok().body(reservationResponseDtos);
+        return ResponseEntity.ok().body(reservationService.searchAndConvertReservations(userId, itemId));
     }
 }

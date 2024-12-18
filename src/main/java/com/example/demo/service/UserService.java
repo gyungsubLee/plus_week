@@ -21,11 +21,13 @@ public class UserService {
     }
 
     @Transactional
-    public void signupWithEmail(UserRequestDto userRequestDto) {
+    public Long signupWithEmail(UserRequestDto userRequestDto) {
         String encodedPassword = PasswordEncoder.encode(userRequestDto.getPassword());
         userRequestDto.updatePassword(encodedPassword);
 
-        userRepository.save(userRequestDto.toEntity());
+        User saveUser = userRepository.save(userRequestDto.toEntity());
+
+        return saveUser.getId();
     }
 
     @Transactional(readOnly = true)

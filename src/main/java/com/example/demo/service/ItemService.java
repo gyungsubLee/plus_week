@@ -18,11 +18,15 @@ public class ItemService {
     }
 
     @Transactional
-    public void createItem(String name, String description, Long ownerId, Long managerId) {
+    public Long createItem(String name, String description, Long ownerId, Long managerId) {
+
         User owner = userRepository.findByIdOrElseThrow(ownerId);
         User manager = userRepository.findByIdOrElseThrow(managerId);
 
         Item item = new Item(name, description, owner, manager);
-        itemRepository.save(item);
+
+        Item saveItem = itemRepository.save(item);
+
+        return saveItem.getId();
     }
 }

@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.ItemRequestDto;
 import com.example.demo.service.ItemService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +19,14 @@ public class ItemController {
     }
 
     @PostMapping
-    public void createItem(@RequestBody ItemRequestDto itemRequestDto) {
-         itemService.createItem(itemRequestDto.getName(),
-                                itemRequestDto.getDescription(),
-                                itemRequestDto.getOwnerId(),
-                                itemRequestDto.getManagerId());
+    public ResponseEntity<Long> createItem(@RequestBody ItemRequestDto itemRequestDto) {
+        Long itemId = itemService.createItem(itemRequestDto.getName(),
+                itemRequestDto.getDescription(),
+                itemRequestDto.getOwnerId(),
+                itemRequestDto.getManagerId());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(itemId);
     }
 }
