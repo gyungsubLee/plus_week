@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.User;
+import com.example.demo.entity.enums.UserStatus;
 import com.example.demo.repository.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class AdminService {
         /**
          * 방법 2) Spring Data JPA - @Modifying 사용
          */
-        int count = userRepository.bulkUpdateUsersStatusBLoked(userIds);
+        int count = userRepository.bulkUpdateUsersStatusBLoked(UserStatus.BLOCKED, userIds);
 
         log.info("유저 status 'BLOKED' 처리한 유저 수: {}", count);
     }

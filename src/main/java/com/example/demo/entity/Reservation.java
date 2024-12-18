@@ -1,13 +1,17 @@
 package com.example.demo.entity;
 
+import com.example.demo.entity.enums.ReservationStatus;
+import com.example.demo.exception.InvalidReservationStatusException;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +29,10 @@ public class Reservation {
 
     private LocalDateTime endAt;
 
-    private String status; // PENDING, APPROVED, CANCELED, EXPIRED
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
-    public Reservation(Item item, User user, String status, LocalDateTime startAt, LocalDateTime endAt) {
+    public Reservation(Item item, User user, ReservationStatus status, LocalDateTime startAt, LocalDateTime endAt) {
         this.item = item;
         this.user = user;
         this.status = status;
@@ -35,9 +40,12 @@ public class Reservation {
         this.endAt = endAt;
     }
 
-    public Reservation() {}
-
-    public void updateStatus(String status) {
-        this.status = status;
+    public void updateStatus(ReservationStatus targetStatus) {
+        if (!this.status.canTransitionTo(targetStatus)) {
+            throw new InvalidReservationStatusException(
+                    "상태 변경 불가능: " + this.status + " -> " + targetStatus
+            );
+        }
+        this.status = targetStatus;
     }
 }

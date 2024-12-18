@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.User;
+import com.example.demo.entity.enums.UserStatus;
 import com.example.demo.exception.UnauthorizedException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,6 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     }
 
     @Modifying
-    @Query("UPDATE User u SET u.status = 'BLOCKED' WHERE u.id IN :userIds")
-    int bulkUpdateUsersStatusBLoked(@Param("userIds") List<Long> userIds);
+    @Query("UPDATE User u SET u.status = :status WHERE u.id IN :userIds")
+    int bulkUpdateUsersStatusBLoked(
+            @Param("status") UserStatus userStatus,
+            @Param("userIds") List<Long> userIds);
 }
