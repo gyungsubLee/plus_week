@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Role;
+import com.example.demo.entity.enums.Role;
 import lombok.Getter;
 
 @Getter

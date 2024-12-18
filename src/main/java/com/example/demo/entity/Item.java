@@ -1,13 +1,16 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
 
 @Entity
 @Getter
 @DynamicInsert
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +37,4 @@ public class Item {
         this.manager = manager;
         this.owner = owner;
     }
-
-    public Item() {}
 }
