@@ -2,28 +2,44 @@ package com.example.demo.service;
 
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.demo.entity.QUser.user;
+
+
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class AdminService {
+
+//    private final JPAQueryFactory queryFactory;
     private final UserRepository userRepository;
 
-    public AdminService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
-    // TODO: 4. find or save 예제 개선
     @Transactional
     public void reportUsers(List<Long> userIds) {
-        for (Long userId : userIds) {
-            User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
 
-            user.updateStatusToBlocked();
+        /**
+         * 방법 1) Querydsl 벌크 연산 사용
+         * 사용 시, 영속성 컨텍스트 와 DB 불인치 문제 주의 필요
+         */
+//        long count = queryFactory
+//                .update(user)
+//                .set(user.status, "BLOCKED")
+//                .where(user.id.in(userIds)) // userIds에 포함된 사용자 ID로 필터링
+//                .execute();
 
-            userRepository.save(user);
-        }
+        /**
+         * 방법 2) Spring Data JPA - @Modifying 사용
+         */
+        int count = userRepository.bulkUpdateUsersStatusBLoked(userIds);
+
+        log.info("유저 status 'BLOKED' 처리한 유저 수: {}", count);
     }
 }
